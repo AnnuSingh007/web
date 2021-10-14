@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Weather Task</title>
+	<link href="css/bootstrap.min.css" rel="stylesheet" />
+	<link href="css/style.css" rel="stylesheet" />
+	<link rel="preconnect" href="https://fonts.gstatic.com">
+	<link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+	<style>
+      body {
+        background: url(images/weather.jpg) no-repeat;
+        background-size: cover;
+        height: 100vh;
+      }
+    </style>
+</head>
+<body>
+   <div class="container">
+      <form class="col-md-6 m-auto py-5" onsubmit="return false;">
+      	<div class="card">
+      		<div class="card-title p-2 text-center mt-3">
+      			Search For Your City Weather
+      		</div>
+      		<div class="card-body">
+      			<div class="input-group mb-3">
+          			<input id="enter-city" type="text" class="form-control" required placeholder="Enter City Name.."/>
+			          <div class="input-group-append">
+			            <button id="search-btn" type="submit" class="btn btn-info">
+			              Search
+			            </button>
+			          </div>
+		        </div>
+      		</div>
+      	</div>
+      </form>
+     <div class="col-md-10 m-auto py-5">
+	      <div class="weather-status text-white text-center" style="display:none;">
+		        <div class="card">
+	             <div class="card-body">
+	                  <table class="table table-bordered">
+	                     <thead>
+	                        <th></th>
+	                        <th>City Name</th>
+	                        <th>Temperature</th>
+	                        <th>Humidity</th>
+	                        <th>Pressure</th>
+	                        <th>Updated Status</th>
+	                     </thead>
+	                     <tbody>
+	                        <tr>
+	                          <td> <img id="weather-icon" src="https://openweathermap.org/img/wn/02d@2x.png"alt="" />
+	                          </td>
+	                           <td><h1 id="updated-city-name"></h1></td>
+	                           <td><h3><span id="updated-temp"></span>&deg;C</h3></td>
+	                           <td><h3><span id="updated-humidity"></span></h3></td>
+	                           <td><h3><span id="updated-pressure"></span></h3></td>
+	                           <td><h1 id="updated-weather-status" class="lead"></h1></td>
+	                        </tr>
+	                     </tbody>
+	                  </table>
+	             </div>
+	        	</div>
+	      </div>
+	    </div>
+    </div>
+
+<!-- Script Part Starts-->
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="js/jquery.easing.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.sticky/1.0.4/jquery.sticky.js" integrity="sha512-p+GPBTyASypE++3Y4cKuBpCA8coQBL6xEDG01kmv4pPkgjKFaJlRglGpCM2OsuI14s4oE7LInjcL5eAUVZmKAQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="js/main.js" referrerpolicy="no-referrer"></script>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+<script
+        src="https://maps.googleapis.com/maps/api/js?key=&callback=initAutocomplete&libraries=places&v=weekly"
+        defer
+></script>
+
+<!-- Script Part Ended -->
+<script type="text/javascript">
+$(document).ready(function(){
+  $("form").submit(function(){
+  	  const key = "6dcac37bb46d7d783c4b442eb5736b10";
+  	  var cityName = $("#enter-city").val();
+   	  $.ajax({
+            url: "https://api.openweathermap.org/data/2.5/weather?q=" +cityName +"&units=metric" + "&appid=" +key,
+            type: "get",
+            success: function(data) {
+            	//console.log(data);
+          		const weatherIconCode = data.weather[0].icon;
+                $(".weather-status").css("display","block");
+          		$("#updated-city-name").text(data.name);
+          		$("#updated-temp").text(data.main.temp);
+          		$("#updated-humidity").text(data.main.humidity);
+          		$("#updated-pressure").text(data.main.pressure);
+          		$("#updated-weather-status").text(data.weather[0].description);
+          		$("#weather-icon").attr("src", `http://openweathermap.org/img/w/${weatherIconCode}.png`);
+          		return false;
+            },
+            error: function(error){
+              alert("City Not Found");
+            }
+        });
+  });
+});
+</script>
+</script>
+</body>
+</html>
